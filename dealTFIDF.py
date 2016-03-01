@@ -1,6 +1,7 @@
 __author__ = 'oger'
 
 import sys
+
 from gensim import corpora, models
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -10,7 +11,7 @@ train_set = []
 f = open('pureData.txt', 'r')
 while 1:
     line = f.readline()
-    if not line:    #need
+    if not line:
         break
     line=line.strip('\n')
     if not line:
@@ -18,11 +19,22 @@ while 1:
     word_list = line.split(' ')
     train_set.append(word_list)
 
+print 'Total Size: ', train_set.__len__()
+
 dic = corpora.Dictionary(train_set)
+dic.save('dic.dat')
+print 'Finish saving dic'
 corpus = [dic.doc2bow(text) for text in train_set]
+corpora.MmCorpus.save_corpus('corpus.dat',corpus)
+print 'Finish saving corpus'
 tfidf = models.TfidfModel(corpus)
-
+tfidf.save('tfidf.dat')
+print 'Finish saving tfidf'
 corpus_tfidf = tfidf[corpus]
-corpus_tfidf.save('corpus_tfidf.dat')
+corpora.MmCorpus.save_corpus('corpus_tfidf.dat',corpus_tfidf)
+print 'Finish saving corpus_tfidf'
 
-# t1 = models.TfidfModel.load('corpus_tfidf.dat')
+# t1 = corpora.Dictionary.load('dic.dat')
+# t2 = corpora.MmCorpus('corpus.dat')
+# t3 = models.TfidfModel.load('tfidf.dat')
+# t4 = corpora.MmCorpus('corpus_tfidf.dat')
