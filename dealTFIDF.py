@@ -10,9 +10,11 @@ train_set = []
 f = open('pureData.txt', 'r')
 while 1:
     line = f.readline()
+    if not line:    #need
+        break
     line=line.strip('\n')
     if not line:
-        break
+        continue
     word_list = line.split(' ')
     train_set.append(word_list)
 
