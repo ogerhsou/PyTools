@@ -25,13 +25,16 @@ dic = corpora.Dictionary(train_set)
 dic.save('dic.dat')
 print 'Finish saving dic'
 corpus = [dic.doc2bow(text) for text in train_set]
-corpora.MmCorpus.save_corpus('corpus.dat',corpus)
+#should save by serialize
+#corpora.MmCorpus.save_corpus('corpus.dat',corpus)
+corpora.MmCorpus.serialize('corpus.dat',corpus)
 print 'Finish saving corpus'
 tfidf = models.TfidfModel(corpus)
 tfidf.save('tfidf.dat')
 print 'Finish saving tfidf'
 corpus_tfidf = tfidf[corpus]
-corpora.MmCorpus.save_corpus('corpus_tfidf.dat',corpus_tfidf)
+#corpora.MmCorpus.save_corpus('corpus_tfidf.dat',corpus_tfidf)
+corpora.MmCorpus.serialize('corpus_tfidf.dat',corpus_tfidf)
 print 'Finish saving corpus_tfidf'
 
 # t1 = corpora.Dictionary.load('dic.dat')
