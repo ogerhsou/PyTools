@@ -125,7 +125,7 @@ while 1:
                 dfs[w] += 1
         else:
             one_doc[w] += 1
-            dfs[w] += 1
+            # dfs[w] += 1   #wrong code
     corpus.append(one_doc)
 
 print 'Finish making corpus'
