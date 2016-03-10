@@ -4,32 +4,49 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import jieba
-jieba.enable_parallel(8)
+import time
+#jieba.enable_parallel(8)   #slower!
+
+string_punc = '\t,\n　. ?;\'[]()`~!@#$%^&*/+_-=<>{}:，。？！·；：‘“【】（）>    、\"\\'.decode('utf-8')
+punc_set = set(string_punc)
+#print punc_set
 
 def stripPunc(input_text):
-    wordcnt = ""
     flag = True
     first = True
-    for token in jieba.cut(input_text):
+    lst = jieba.cut(input_text)
+    #t1_lst = []
+    for token in lst:
         if flag:
-            print token
+            try: 
+                int(token)
+            except:
+                #print 'error id: ', token
+                return
             flag = False
-        elif token not in " \t,\n.?;'[]()`~!@#$%^&*/+_-=<>{}:，。？！·；：‘“【】（）、\"\\":
-            if first:
-                wordcnt += token
-                first = False
-            else:
-                wordcnt += ',' + token
-    print wordcnt
+            #t1_lst.append(token)
+            yield token
+        elif token not in punc_set:
+            yield token
+            #t1_lst.append(token)
+    #return t1_lst
 
-
-for line in sys.stdin:
+cnt = 0
+time1 = time.time()
+fin = open(sys.argv[1], 'r')
+fout = open(sys.argv[2], 'w')
+while 1:
+#for line in sys.stdin:
+    line = fin.readline()
     if not line:
-        continue;
-    
+        break
+        #continue
     if len(line) <= 8:
-        continue;
+        continue
     else:
-        stripPunc(line)
-        # for w in stripPunc(line):
-        # print wordcnt
+        lst = stripPunc(line)
+        cnt += 1
+        if cnt % 10000 == 0:
+            print cnt
+            print time.time()-time1
+        fout.write((" ".join(lst)+'\n').encode('utf-8'))
